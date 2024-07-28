@@ -1,6 +1,8 @@
 package com.app.ContactManager.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +13,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer uId;
+    @Column(nullable = false)
+    @NotBlank(message = "Missing required parameter name")
     private String name;
-    @Column(unique = true)
+
+    @Email(message = "Email id is invalid")
+    @NotBlank(message = "Missing required parameter email")
+    @Column(unique = true, nullable = false)
     private String email;
+    @NotBlank(message = "Missing required parameter password")
     private String password;
     @Column(length = 500)
     private String role;
