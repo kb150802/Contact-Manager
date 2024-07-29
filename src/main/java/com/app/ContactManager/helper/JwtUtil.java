@@ -4,6 +4,8 @@ package com.app.ContactManager.helper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,8 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtil {
-
-    private String SECRET_KEY = "secret";
+    @Value("${application.jwt.secretKey}")
+    private String SECRET_KEY;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
