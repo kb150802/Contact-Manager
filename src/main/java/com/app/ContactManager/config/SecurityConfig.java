@@ -51,7 +51,7 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/auth/login", "/auth/register","/error").permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/user/")).hasAuthority("USER")
+                        .requestMatchers(new AntPathRequestMatcher("/user/**")).hasAuthority("USER")
                 ) .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )

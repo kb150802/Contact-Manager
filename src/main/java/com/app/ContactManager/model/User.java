@@ -1,9 +1,7 @@
 package com.app.ContactManager.model;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +11,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer uId;
+
     @Column(nullable = false)
     @NotBlank(message = "Missing required parameter name")
     private String name;
@@ -21,13 +20,17 @@ public class User {
     @NotBlank(message = "Missing required parameter email")
     @Column(unique = true, nullable = false)
     private String email;
+
     @NotBlank(message = "Missing required parameter password")
     private String password;
-    @Column(length = 500)
+
+
     private String role;
     private String imageUrl;
+
+    @Column(length = 500)
     private String about;
-    private Boolean enabled;
+
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Contact> contacts = new ArrayList<>();
 
@@ -87,25 +90,17 @@ public class User {
         this.about = about;
     }
 
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
 
     public User() {
     }
 
-    public User(String password, String email, String name, String role, String imageUrl, String about, Boolean enabled, List<Contact> contacts) {
+    public User(String password, String email, String name, String role, String imageUrl, String about,  List<Contact> contacts) {
         this.password = password;
         this.email = email;
         this.name = name;
         this.role = role;
         this.imageUrl = imageUrl;
         this.about = about;
-        this.enabled = enabled;
         this.contacts = contacts;
     }
 }
