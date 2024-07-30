@@ -1,5 +1,6 @@
 package com.app.ContactManager.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,7 +18,27 @@ public class Contact {
     @Column(length = 50000)
     private String description;
     @ManyToOne
+    @JsonBackReference
     private User user;
+    public Contact(){
+
+    }
+
+    public int getcId() {
+        return cId;
+    }
+
+    public void setcId(int cId) {
+        this.cId = cId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Contact(String name, String secondName, String work, String phone, String email, String image, String description) {
         this.name = name;

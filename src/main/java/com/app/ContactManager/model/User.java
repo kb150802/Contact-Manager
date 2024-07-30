@@ -1,4 +1,5 @@
 package com.app.ContactManager.model;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -30,7 +31,7 @@ public class User {
 
     @Column(length = 500)
     private String about;
-
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Contact> contacts = new ArrayList<>();
 

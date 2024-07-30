@@ -1,5 +1,6 @@
 package com.app.ContactManager.service;
 
+import com.app.ContactManager.model.Contact;
 import com.app.ContactManager.model.User;
 import com.app.ContactManager.model.UserDTO;
 import com.app.ContactManager.repository.UserRepository;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -70,6 +72,20 @@ public class UserService {
             return new ResponseEntity<>("User Deleted Successfully", HttpStatus.OK);
         }catch (Exception exception) {
             return new ResponseEntity<>("Failed to Delete", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<?> addContact(String username, Contact contact) {
+        try {
+            User user = userRepository.findUserByUsername(username);
+            List<Contact> contacts = user.getContacts();
+            contact.setUser(user);
+            contacts.add(contact);
+            userRepository.save(user);
+            return new ResponseEntity<>("Contact added successfully", HttpStatus.OK);
+        }catch (Exception exception) {
+            return new ResponseEntity<>("Failed to add contact" + exception.getLocalizedMessage()
+                    , HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
