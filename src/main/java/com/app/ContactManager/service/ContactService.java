@@ -19,12 +19,43 @@ public class ContactService {
     @Autowired
     UserRepository userRepository;
     public ResponseEntity<?> deleteContact(String username, Integer cId) {
-        Contact contact = contactRepository.getContactById(cId);
-        User user = userRepository.findUserByUsername(username);
-        List<Contact> contacts = user.getContacts();
-        contacts.remove(contact);
-        userRepository.save(user);
-        contactRepository.save(contact);
-        return new ResponseEntity<>("In delete", HttpStatus.OK);
+        try {
+            Contact contact = contactRepository.getContactById(cId);
+            User user = userRepository.findUserByUsername(username);
+            if(!contact.getUser().getEmail().equals(username)) {
+                return new ResponseEntity<>("Can not delete contact", HttpStatus.FORBIDDEN);
+            }
+            List<Contact> contacts = user.getContacts();
+            contacts.remove(contact);
+            userRepository.save(user);
+            contactRepository.save(contact);
+            return new ResponseEntity<>("Contact deleted successfully", HttpStatus.OK);
+        }catch(Exception exception) {
+            return new ResponseEntity<>("Failed to delete contact", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    public ResponseEntity<?> updateContact(String username, Contact contact) {
+        try{
+
+            Contact dbContact = contactRepository.getContactById(contact.getcId());
+            if(!dbContact.getUser().getEmail().equals(username)) {
+                return new ResponseEntity<>("Can not update contact", HttpStatus.FORBIDDEN);
+            }
+            dbContact.setName(contact.getName());
+            dbContact.setSecondName(contact.getSecondName());
+            dbContact.setDescription(contact.getDescription());
+            dbContact.setEmail(contact.getEmail());
+            dbContact.setWork(contact.getWork());
+            dbContact.setPhone(contact.getPhone());
+            dbContact.setImage(contact.getImage());
+            contactRepository.save(dbContact);
+
+            return new ResponseEntity<>("Contact updated successfully", HttpStatus.OK);
+        }catch (Exception exception) {
+            return new ResponseEntity<>("Failed to update contact", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

@@ -39,6 +39,14 @@ public class User {
         return contacts;
     }
 
+    public Integer getuId() {
+        return uId;
+    }
+
+    public void setuId(Integer uId) {
+        this.uId = uId;
+    }
+
     public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
     }
