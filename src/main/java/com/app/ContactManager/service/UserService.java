@@ -88,4 +88,13 @@ public class UserService {
                     , HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public ResponseEntity<?> getUserContacts(String username) {
+        try{
+            User user = userRepository.findUserByUsername(username);
+            return new ResponseEntity<>(user.getContacts(), HttpStatus.OK);
+        }catch (Exception exception) {
+            return new ResponseEntity<>("Failed to fetch contacts", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

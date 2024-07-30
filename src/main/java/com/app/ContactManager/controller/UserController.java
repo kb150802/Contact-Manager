@@ -18,6 +18,10 @@ public class UserController {
     public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
         return userService.getUserInfo(userDetails.getUsername());
     }
+    @GetMapping("/contacts")
+    public ResponseEntity<?> getUserContacts(@AuthenticationPrincipal UserDetails userDetails) {
+        return userService.getUserContacts(userDetails.getUsername());
+    }
     @PutMapping("/update")
     public ResponseEntity<?> updateUserInfo(@AuthenticationPrincipal UserDetails userDetails, @RequestBody User newUserDetails) {
         return userService.updateUserInfo(userDetails.getUsername(), newUserDetails);
