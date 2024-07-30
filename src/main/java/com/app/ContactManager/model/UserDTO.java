@@ -8,7 +8,6 @@ public class UserDTO {
     private String role;
     private String about;
     private String imageUrl;
-    private List<Contact> contacts;
 
     public UserDTO(User user) {
         this.name = user.getName();
@@ -16,7 +15,6 @@ public class UserDTO {
         this.role = user.getRole();
         this.about = user.getAbout();
         this.imageUrl = user.getImageUrl();
-        this.contacts = user.getContacts();
     }
 
     public UserDTO(String name, String email, String role, String about, String imageUrl, List<Contact> contacts) {
@@ -25,7 +23,6 @@ public class UserDTO {
         this.role = role;
         this.about = about;
         this.imageUrl = imageUrl;
-        this.contacts = contacts;
     }
 
     public String getName() {
@@ -58,14 +55,6 @@ public class UserDTO {
 
     public void setAbout(String about) {
         this.about = about;
-    }
-
-    public List<Contact> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<Contact> contacts) {
-        this.contacts = contacts;
     }
 
     public String getImageUrl() {
