@@ -7,12 +7,17 @@ import com.app.ContactManager.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +27,8 @@ import java.util.logging.Logger;
 public class UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    FileStorageService fileStorageService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -95,6 +102,37 @@ public class UserService {
             return new ResponseEntity<>(user.getContacts(), HttpStatus.OK);
         }catch (Exception exception) {
             return new ResponseEntity<>("Failed to fetch contacts", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<?> addImage(String username, MultipartFile file) {
+        try{
+            User user = userRepository.findUserByUsername(username);
+            if(user == null) {
+                return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
+            }
+            String imageUrl = fileStorageService.storeFile(file);
+            user.setImageUrl(file.getOriginalFilename());
+            userRepository.save(user);
+            return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
+        }catch (Exception exception) {
+            return new ResponseEntity<>("Failed to upload Image", HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+
+    }
+
+    public ResponseEntity<?> getImage(String username) {
+        try{
+            User user = userRepository.findUserByUsername(username);
+            if(user == null) {
+                return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
+            }
+            Resource resource = fileStorageService.getFile(user.getImageUrl());
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource.getContentAsByteArray());
+        }catch (Exception exception) {
+            return new ResponseEntity<>("Failed to fetch image", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

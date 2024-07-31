@@ -43,7 +43,7 @@ public class AuthController {
         return ResponseEntity.ok(jwt);
     }
     @PostMapping("/register")
-    public ResponseEntity<?> upsertUser(@Valid @RequestBody User user) {
+    public ResponseEntity<?> addUser(@Valid @RequestBody User user) {
         return userService.addUser(user);
     }
 
