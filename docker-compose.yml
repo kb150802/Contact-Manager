@@ -1,0 +1,27 @@
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: kush
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: ContactManager
+    ports:
+      - 5433:5432
+    networks:
+      - c-network
+    volumes:
+      - postgress-c-data:/var/lib/postgresql/data
+  app:
+    build: .
+    ports:
+      - 8090:8080
+    networks:
+      - c-network
+
+networks:
+  c-network:
+    driver: bridge
+
+volumes:
+  postgress-c-data:

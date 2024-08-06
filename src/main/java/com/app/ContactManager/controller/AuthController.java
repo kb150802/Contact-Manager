@@ -1,6 +1,6 @@
 package com.app.ContactManager.controller;
 
-import com.app.ContactManager.helper.JwtUtil;
+import com.app.ContactManager.service.JwtUtil;
 import com.app.ContactManager.model.AuthenticationRequest;
 import com.app.ContactManager.model.User;
 import com.app.ContactManager.service.CustomUserDetails;
