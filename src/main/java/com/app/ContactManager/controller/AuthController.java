@@ -1,5 +1,6 @@
 package com.app.ContactManager.controller;
 
+import com.app.ContactManager.model.LoginResponse;
 import com.app.ContactManager.service.JwtUtil;
 import com.app.ContactManager.model.AuthenticationRequest;
 import com.app.ContactManager.model.User;
@@ -40,7 +41,9 @@ public class AuthController {
 
         final CustomUserDetails userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(jwt);
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setJwtToken(jwt);
+        return ResponseEntity.ok(loginResponse);
     }
     @PostMapping("/register")
     public ResponseEntity<?> addUser(@Valid @RequestBody User user) {
