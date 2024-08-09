@@ -7,6 +7,9 @@ target/
 #env#
 /.env
 
+/docker-compose.yml
+/Dockerfile
+
 /uploads
 
 ### STS ###
