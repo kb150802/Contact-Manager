@@ -1,14 +1,14 @@
 package com.app.ContactManager.config;
 
-import com.app.ContactManager.helper.JwtUtil;
+import com.app.ContactManager.service.CustomUserDetails;
+import com.app.ContactManager.service.JwtUtil;
 import com.app.ContactManager.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,21 +21,15 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    public JwtRequestFilter(CustomUserDetailsService customUserDetailsService, JwtUtil jwtUtil) {
-        this.customUserDetailsService = customUserDetailsService;
-        this.jwtUtil = jwtUtil;
-    }
+    private ApplicationContext applicationContext;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-
+        JwtUtil jwtUtil = applicationContext.getBean(JwtUtil.class);
         final String authorizationHeader = request.getHeader("Authorization");
         String username = null;
         String jwt = null;
@@ -47,7 +41,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = applicationContext.getBean(CustomUserDetailsService.class).loadUserByUsername(username);
+
 
             if (jwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
