@@ -15,7 +15,7 @@ services:
   app:
     build: .
     ports:
-      - 8090:8080
+      - 8080:8080
     networks:
       - c-network
 
